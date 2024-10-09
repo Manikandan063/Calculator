@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input, textarea, button {
+            margin-bottom: 12px;
+        }
+        input, textarea {
+            width: calc(100% - 22px);
+            margin: 0 auto;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f89b37;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        button:hover {
+            background-color: #5af9d9;
+        }
+        .button-row {
+            margin-bottom: 10px;
+        }
+        .button-row button {
+            width: 60px;
+            margin: 5px;
+        }
+        .button-row:last-child {
+            margin-bottom: 0;
+        }
+        .output {
+            width: calc(100% - 22px);
+            font-size: 24px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <textarea id="Output" class="output" rows="2" readonly></textarea> <br>
+        <div class="button-row">
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="setOperation('+')">+</button>
+        </div>
+        <div class="button-row">
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="setOperation('-')">-</button>
+        </div>
+        <div class="button-row">
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="setOperation('')"></button>
+        </div>
+        <div class="button-row">
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="clearOutput()">C</button>
+            <button onclick="calculateResult()">=</button>
+            <button onclick="setOperation('/')">/</button>
+        </div>
+    </div>
+    <script>
+        let currentOperation = null;
+        let previousValue = '';
+
+        function appendNumber(number) {
+            let output = document.getElementById('Output');
+            output.value = output.value === 'Error: Division by zero' ? number : output.value + number;
+        }
+        function setOperation(operation) {
+            previousValue = document.getElementById('Output').value;
+            currentOperation = operation;
+            document.getElementById('Output').value = '';
+        }
+        function clearOutput() {
+            document.getElementById('Output').value = '';
+            currentOperation = null;
+            previousValue = '';
+        }
+        function calculateResult() {
+            let currentValue = document.getElementById('Output').value;
+            let result;
+            if (currentOperation && previousValue) {
+                previousValue = Number(previousValue);
+                currentValue = Number(currentValue);
+                switch (currentOperation) {
+                    case '+':
+                        result = previousValue + currentValue;
+                        break;
+                    case '-':
+                        result = previousValue - currentValue;
+                        break;
+                    case '*':
+                        result = previousValue * currentValue;
+                        break;
+                    case '/':
+                        result = currentValue === 0 ? 'Error: Division by zero' : previousValue / currentValue;
+                        break;
+                    default:
+                        result = 'Error';
+                }
+                document.getElementById('Output').value = result;
+                currentOperation = null;
+                previousValue = '';
+            }
+        }
+    </script>
+</body>
+</html>
